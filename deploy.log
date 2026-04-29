@@ -1,0 +1,12 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+ ⛅️ wrangler 4.85.0 (update available 4.86.0)
+─────────────────────────────────────────────
+Uploading... (151/151)
+✨ Success! Uploaded 0 files (151 already uploaded) (0.36 sec)
+
+✨ Compiled Worker successfully
+✨ Uploading Worker bundle
+✨ Uploading _routes.json
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://c8cd0326.ably-link-server.pages.dev

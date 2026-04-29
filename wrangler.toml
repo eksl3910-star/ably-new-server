@@ -1,0 +1,9 @@
+name = "ably-link-server"
+pages_build_output_dir = ".vercel/output/static"
+compatibility_date = "2024-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ably-db"
+database_id = "e898638f-5728-4246-ad87-a1020f0aa633"
