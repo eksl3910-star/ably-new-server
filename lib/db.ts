@@ -175,6 +175,30 @@ export async function getStats(userId: string) {
   return { queued: queued?.c ?? 0, myQueued: myQueued?.c ?? 0 };
 }
 
+export async function getAdminStats() {
+  const db = requireDb();
+  const now = Date.now();
+  const oneDayMs = 24 * 60 * 60 * 1000;
+  const startOfToday = now - (now % oneDayMs);
+
+  const totalUsers = await db.prepare(`SELECT COUNT(*) as c FROM users`).first<{ c: number }>();
+  const todayUsers = await db
+    .prepare(`SELECT COUNT(*) as c FROM users WHERE created_at >= ?`)
+    .bind(startOfToday)
+    .first<{ c: number }>();
+  const totalLinks = await db.prepare(`SELECT COUNT(*) as c FROM links`).first<{ c: number }>();
+  const queuedLinks = await db.prepare(`SELECT COUNT(*) as c FROM links WHERE state = 'queued'`).first<{ c: number }>();
+  const consumedLinks = await db.prepare(`SELECT COUNT(*) as c FROM links WHERE state = 'consumed'`).first<{ c: number }>();
+
+  return {
+    totalUsers: totalUsers?.c ?? 0,
+    todayUsers: todayUsers?.c ?? 0,
+    totalLinks: totalLinks?.c ?? 0,
+    queuedLinks: queuedLinks?.c ?? 0,
+    consumedLinks: consumedLinks?.c ?? 0,
+  };
+}
+
 export async function claimNextLink(receiverUserId: string) {
   const db = requireDb();
   const now = Date.now();
