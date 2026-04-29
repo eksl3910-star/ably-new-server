@@ -1,4 +1,4 @@
-import { extractAblyUrl, isMaintenanceMode, submitLink, upsertUserByNickname } from "@/lib/db";
+import { checkDuplicateLink, extractAblyUrl, isMaintenanceMode, submitLink, upsertUserByNickname } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge";
@@ -28,6 +28,11 @@ export async function POST(req: Request) {
     user = await upsertUserByNickname(nickname);
   } catch {
     return NextResponse.json({ error: "닉네임을 확인해주세요." }, { status: 400 });
+  }
+
+  const isDuplicate = await checkDuplicateLink(user.id, url);
+  if (isDuplicate) {
+    return NextResponse.json({ error: "이미 대기열에 있는 링크예요." }, { status: 400 });
   }
 
   const res = await submitLink(user.id, url);

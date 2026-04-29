@@ -112,6 +112,15 @@ export function extractAblyUrl(raw: string) {
   }
 }
 
+export async function checkDuplicateLink(ownerUserId: string, url: string) {
+  const db = requireDb();
+  const existing = await db
+    .prepare(`SELECT id FROM links WHERE url = ? AND owner_user_id = ? AND state IN ('queued', 'claimed')`)
+    .bind(url, ownerUserId)
+    .first<{ id: string }>();
+  return existing ? true : false;
+}
+
 export async function submitLink(ownerUserId: string, url: string) {
   const db = requireDb();
   const now = Date.now();
